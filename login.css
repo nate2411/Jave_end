@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0%;
+  box-sizing: border-box;
+}
+
+.login-box {
+  width: 400px;
+  height: 300px;
+  background-color: deepskyblue;
+  margin-top: 300px;
+  margin-left: 700px;
+}
+
+h1 {
+  text-align: center;
+  padding-top: 15px;
+}
+
+.par-3 {
+  text-align: center;
+  color: black;
+  font-size: 15px;
+  margin-top: 10px;
+}
+
+.login-box button {
+  padding: 10px 25px;
+  background-color: dodgerblue;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.login-box button:hover {
+  background-color: white;
+  color: dodgerblue;
+  font-weight: 600;
+  border: 1px solid dodgerblue;
+}
