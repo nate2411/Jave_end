@@ -83,38 +83,49 @@ function deleteProduct(index) {
     )
       .then((respose) => respose.json())
       .then((data) => console.log(data));
-    createCards();
+    getProduct();
   }
 }
 
 function createCards(card) {
   console.log(card);
   return `
-  <div class="content">
-  <div class="productName">
-    <h3>${card[1]}</h3>
-  </div>
-  <div>
-    <p>
-      ${card[5]}
-    </p>
-  </div>
-  <div class="price"><h2>${card[3]}</h2></div>
+            <div class="cards">
+              <div class="imgBx">
+                <img src="./image/2.jpg" alt="" />
+                <ul class="action">
+                  <li><i class="fas fa-shopping-cart"></i></li>
+                  <li onclick="deleteProduct(${card[0]}"><i class="far fa-trash-alt"></i></li>
+                  <li>
+                    <a href="./edit.html"><i class="fas fa-edit"></i></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="content">
+                <div class="productName">
+                <h3>${card[1]}</h3>
+                </div>
+                <div>
+                  <p>
+                  ${card[5]}
+                  </p>
+                </div>
+                <div class="price"><h2>${card[3]}</h2></div>
 
-  <div class="rating">
-    <i class="far fa-star"></i>
-    <i class="far fa-star"></i>
-    <i class="far fa-star"></i>
-    <i class="far fa-star"></i>
-    <i class="far fa-star"></i>
-  </div>
-</div>
-<a href="./add.html"><button>ADD PRODUCT</button></a>
-  `;
+                <div class="rating">
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                </div>
+              </div>
+            </div>
+          `;
 }
 
 function getProduct() {
-  let container = document.querySelector(".container");
+  let container = document.querySelector(".cards");
   fetch("https://boiling-brook-98620.herokuapp.com/show-products/")
     .then((response) => response.json())
     .then((data) => {
@@ -154,17 +165,51 @@ function EditForm(product) {
 </div>          `;
 }
 
-function addProduct(new_item) {
-  fetch("/add-product/", {
+function addProduct(item) {
+  fetch("https://boiling-brook-98620.herokuapp.com/add-product/", {
     method: "POST",
-
-    body: JSON.stringify(new_item),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
+    body: JSON.stringify(item),
   })
-    .then((responce) => responce.json())
-    .then((data) => console.log(data));
-
-  getProducts();
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data.data);
+    });
 }
+
+let form = document.querySelector(".form");
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  let name = document.querySelector("#name").value;
+  let price = document.querySelector("#price").value;
+  let description = document.querySelector("#description").value;
+  let category = document.querySelector("#category").value;
+
+  let item = {
+    name,
+    price,
+    description,
+    category,
+  };
+
+  addProduct(item);
+});
+
+function addToCart(id) {
+  let product = getProductById(id);
+  let cart_items = JSON.parse(localStorage.getItem("cart"));
+
+  if (cart_items == null) {
+    cart_items = [];
+  }
+
+  cart_items.push(product);
+  localStorage.setItem("cart", JSON.stringify(cart_items));
+}
+function getProduct(id) {
+  let product = JSON.parse(localStorage.getItem("products"));
+  return products.filter((product) => product.id == id);
+}
+
+getProducts();
